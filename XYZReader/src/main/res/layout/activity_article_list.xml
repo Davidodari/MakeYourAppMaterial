@@ -6,7 +6,7 @@
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="168dp"
+        android:layout_height="84dp"
         android:background="?colorPrimary">
 
         <android.support.design.widget.CollapsingToolbarLayout
@@ -38,24 +38,26 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh_layout"
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="none"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:paddingLeft="@dimen/list_side_margin"
-            android:paddingTop="116dp"
-            android:paddingRight="@dimen/list_side_margin"
-            android:paddingBottom="28dp"
-            android:scrollbarStyle="outsideOverlay" />
-    </android.support.v4.widget.SwipeRefreshLayout>
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:scrollbarStyle="outsideOverlay" />
+        </android.support.v4.widget.SwipeRefreshLayout>
+    </android.support.v4.widget.NestedScrollView>
 
 
 </android.support.design.widget.CoordinatorLayout>
