@@ -61,9 +61,10 @@ public class ArticleListActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_article_list);
 
         mToolbar = findViewById(R.id.toolbar);
+//        Set AppBar Elevetaion for lollipop and above
         AppBarLayout lAppBarLayout = findViewById(R.id.appbar);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            lAppBarLayout.setElevation(convertDpToPixel(8, this));
+            lAppBarLayout.setElevation(convertDpToPixel(4, this));
         }
 
 
