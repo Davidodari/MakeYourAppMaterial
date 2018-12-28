@@ -23,4 +23,5 @@
     <color name="theme_accent">#7c4dff</color>
     <color name="text_color">#424242</color>
     <color name="secondary_text_color">#6000</color>
+    <color name="article_detail_title_background">#333</color>
 </resources>
