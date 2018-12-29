@@ -3,16 +3,16 @@ package com.example.xyzreader.ui;
 import android.content.Context;
 import android.util.AttributeSet;
 
-public class CustomDetailImageView extends android.support.v7.widget.AppCompatImageView {
-    public CustomDetailImageView(Context context) {
+public class CustomArticleImageView extends android.support.v7.widget.AppCompatImageView {
+    public CustomArticleImageView(Context context) {
         super(context);
     }
 
-    public CustomDetailImageView(Context context, AttributeSet attrs) {
+    public CustomArticleImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public CustomDetailImageView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CustomArticleImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
