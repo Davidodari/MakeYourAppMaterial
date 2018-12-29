@@ -1,7 +1,6 @@
 package com.example.xyzreader.ui;
 
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -14,19 +13,24 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
-import com.example.xyzreader.data.ItemsContract;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-class Adapter extends RecyclerView.Adapter<ViewHolder> {
+
+class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     private Cursor mCursor;
     private Context mContext;
+
+    private static IitemClick iitemClickInterface;
     private final String TAG = getClass().getSimpleName();
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss");
@@ -35,10 +39,12 @@ class Adapter extends RecyclerView.Adapter<ViewHolder> {
     // Most time functions can only handle 1902 - 2037
     private GregorianCalendar START_OF_EPOCH = new GregorianCalendar(2, 1, 1);
 
-    public Adapter(Cursor cursor, Context mContext) {
+    public Adapter(Cursor cursor, Context mContext, IitemClick iitemClickInterface) {
         mCursor = cursor;
         mContext = mContext;
+        Adapter.iitemClickInterface = iitemClickInterface;
     }
+
 
     @Override
     public long getItemId(int position) {
@@ -50,13 +56,6 @@ class Adapter extends RecyclerView.Adapter<ViewHolder> {
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_article, parent, false);
         final ViewHolder vh = new ViewHolder(view);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mContext.startActivity(new Intent(Intent.ACTION_VIEW,
-                        ItemsContract.Items.buildItemUri(getItemId(vh.getAdapterPosition()))));
-            }
-        });
         return vh;
     }
 
@@ -91,31 +90,43 @@ class Adapter extends RecyclerView.Adapter<ViewHolder> {
                             + "<br/>" + " by "
                             + mCursor.getString(ArticleLoader.Query.AUTHOR)));
         }
+
         String url = mCursor.getString(ArticleLoader.Query.THUMB_URL);
-        Glide.with(mContext)
+        Glide.with(holder.itemView.getContext())
                 .load(url)
+                .apply(RequestOptions.fitCenterTransform())
                 .into(holder.thumbnailView);
-//            holder.thumbnailView.setImageUrl(
-//                    ,
-//                    ImageLoaderHelper.getInstance(ArticleListActivity.this).getImageLoader());
-//            holder.thumbnailView.setAspectRatio(mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
     }
 
     @Override
     public int getItemCount() {
         return mCursor.getCount();
     }
-}
 
-class ViewHolder extends RecyclerView.ViewHolder {
-    ImageView thumbnailView;
-    TextView titleView;
-    TextView subtitleView;
 
-    ViewHolder(View view) {
-        super(view);
-        thumbnailView = view.findViewById(R.id.thumbnail);
-        titleView = view.findViewById(R.id.article_title);
-        subtitleView = view.findViewById(R.id.article_subtitle);
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        @BindView(R.id.thumbnail)
+        ImageView thumbnailView;
+        @BindView(R.id.article_title)
+        TextView titleView;
+        @BindView(R.id.article_subtitle)
+        TextView subtitleView;
+
+        ViewHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Log.d(getClass().getSimpleName(), "click");
+            iitemClickInterface.itemClickedPosition(Adapter.this.getItemId(getAdapterPosition()));
+        }
+
+    }
+
+    interface IitemClick {
+        void itemClickedPosition(long itemPosition);
     }
 }
