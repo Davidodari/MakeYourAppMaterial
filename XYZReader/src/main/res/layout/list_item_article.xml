@@ -16,11 +16,10 @@
         android:orientation="vertical">
 
         <!--suppress AndroidLintContentDescription -->
-        <ImageView
+        <com.example.xyzreader.ui.CustomDetailImageView
             android:id="@+id/thumbnail"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
             android:background="@color/photo_placeholder"
             android:scaleType="centerCrop" />
 
