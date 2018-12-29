@@ -27,7 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
+class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.ViewHolder> {
     private Cursor mCursor;
 
 
@@ -40,9 +40,9 @@ class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     // Most time functions can only handle 1902 - 2037
     private GregorianCalendar START_OF_EPOCH = new GregorianCalendar(2, 1, 1);
 
-    Adapter(Cursor cursor, IitemClick iitemClickInterface) {
+    ArticleListAdapter(Cursor cursor, IitemClick iitemClickInterface) {
         mCursor = cursor;
-        Adapter.iitemClickInterface = iitemClickInterface;
+        ArticleListAdapter.iitemClickInterface = iitemClickInterface;
     }
 
 
@@ -122,7 +122,7 @@ class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         @Override
         public void onClick(View v) {
             Log.d(getClass().getSimpleName(), "click");
-            iitemClickInterface.itemClickedPosition(Adapter.this.getItemId(getAdapterPosition()));
+            iitemClickInterface.itemClickedPosition(ArticleListAdapter.this.getItemId(getAdapterPosition()));
         }
 
     }

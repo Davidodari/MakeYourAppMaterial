@@ -32,7 +32,7 @@ import butterknife.ButterKnife;
  * activity presents a grid of items as cards.
  */
 public class ArticleListActivity extends AppCompatActivity implements
-        LoaderManager.LoaderCallbacks<Cursor>, Adapter.IitemClick {
+        LoaderManager.LoaderCallbacks<Cursor>, ArticleListAdapter.IitemClick {
 
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -99,9 +99,9 @@ public class ArticleListActivity extends AppCompatActivity implements
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        Adapter adapter = new Adapter(cursor, this);
-        adapter.setHasStableIds(true);
-        mRecyclerView.setAdapter(adapter);
+        ArticleListAdapter lArticleListAdapter = new ArticleListAdapter(cursor, this);
+        lArticleListAdapter.setHasStableIds(true);
+        mRecyclerView.setAdapter(lArticleListAdapter);
         int columnCount = getResources().getInteger(R.integer.list_column_count);
         StaggeredGridLayoutManager sglm =
                 new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
