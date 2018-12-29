@@ -14,9 +14,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
 
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
@@ -101,7 +99,7 @@ public class ArticleListActivity extends AppCompatActivity implements
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        Adapter adapter = new Adapter(cursor, this, this);
+        Adapter adapter = new Adapter(cursor, this);
         adapter.setHasStableIds(true);
         mRecyclerView.setAdapter(adapter);
         int columnCount = getResources().getInteger(R.integer.list_column_count);
@@ -121,8 +119,7 @@ public class ArticleListActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void itemClickedPosition(long itemPosition) {
-        Log.d(getClass().getSimpleName(),"item click click");
-        startActivity(new Intent(Intent.ACTION_VIEW, ItemsContract.Items.buildItemUri(itemPosition)));
+    public void itemClickedPosition(long itemId) {
+        startActivity(new Intent(Intent.ACTION_VIEW, ItemsContract.Items.buildItemUri(itemId)));
     }
 }

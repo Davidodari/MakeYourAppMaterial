@@ -1,7 +1,7 @@
 package com.example.xyzreader.ui;
 
-import android.content.Context;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.format.DateUtils;
@@ -21,6 +21,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,20 +29,19 @@ import butterknife.ButterKnife;
 
 class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     private Cursor mCursor;
-    private Context mContext;
+
 
     private static IitemClick iitemClickInterface;
     private final String TAG = getClass().getSimpleName();
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss");
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss", Locale.getDefault());
     // Use default locale format
     private SimpleDateFormat outputFormat = new SimpleDateFormat();
     // Most time functions can only handle 1902 - 2037
     private GregorianCalendar START_OF_EPOCH = new GregorianCalendar(2, 1, 1);
 
-    public Adapter(Cursor cursor, Context mContext, IitemClick iitemClickInterface) {
+    Adapter(Cursor cursor, IitemClick iitemClickInterface) {
         mCursor = cursor;
-        mContext = mContext;
         Adapter.iitemClickInterface = iitemClickInterface;
     }
 
@@ -52,11 +52,12 @@ class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         return mCursor.getLong(ArticleLoader.Query._ID);
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_article, parent, false);
-        final ViewHolder vh = new ViewHolder(view);
-        return vh;
+
+        return new ViewHolder(view);
     }
 
     private Date parsePublishedDate() {
@@ -71,7 +72,7 @@ class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         mCursor.moveToPosition(position);
         holder.titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
         Date publishedDate = parsePublishedDate();
