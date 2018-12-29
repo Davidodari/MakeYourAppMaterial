@@ -21,6 +21,9 @@ import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
 import com.example.xyzreader.data.UpdaterService;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 /**
  * An activity representing a list of Articles. This activity has different presentations for
@@ -31,24 +34,23 @@ import com.example.xyzreader.data.UpdaterService;
 public class ArticleListActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private RecyclerView mRecyclerView;
+    @BindView(R.id.swipe_refresh_layout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.recycler_view)
+    RecyclerView mRecyclerView;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article_list);
-
+        ButterKnife.bind(this);
 //        Set AppBar Elevetaion for lollipop and above
         AppBarLayout lAppBarLayout = findViewById(R.id.appbar);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             lAppBarLayout.setElevation(convertDpToPixel(4, this));
         }
 
-
-        mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
-        mRecyclerView = findViewById(R.id.recycler_view);
 
         getLoaderManager().initLoader(0, null, this);
 
