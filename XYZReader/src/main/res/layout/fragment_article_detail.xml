@@ -23,7 +23,8 @@
                     android:id="@+id/photo"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:scaleType="centerCrop" />
+                    android:scaleType="centerCrop"
+                    android:transitionName="@string/transition_name" />
 
                 <View
                     android:layout_width="match_parent"

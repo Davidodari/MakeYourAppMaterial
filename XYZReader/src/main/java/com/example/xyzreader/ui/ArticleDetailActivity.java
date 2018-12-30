@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowInsets;
 
 
 import com.example.xyzreader.R;
@@ -65,6 +66,7 @@ public class ArticleDetailActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 onSupportNavigateUp();
+                supportFinishAfterTransition();
             }
         });
 
@@ -74,6 +76,18 @@ public class ArticleDetailActivity extends AppCompatActivity
                 mStartId = ItemsContract.Items.getItemId(getIntent().getData());
                 mSelectedItemId = mStartId;
             }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mUpButtonContainer.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
+                @Override
+                public WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
+                    view.onApplyWindowInsets(windowInsets);
+                    mTopInset = windowInsets.getSystemWindowInsetTop();
+                    mUpButtonContainer.setTranslationY(mTopInset);
+                    updateUpButtonPosition();
+                    return windowInsets;
+                }
+            });
         }
     }
 
@@ -101,7 +115,7 @@ public class ArticleDetailActivity extends AppCompatActivity
                     mCursor.moveToPosition(position);
                 }
                 mSelectedItemId = mCursor.getLong(ArticleLoader.Query._ID);
-
+                updateUpButtonPosition();
             }
         });
     }
@@ -138,6 +152,17 @@ public class ArticleDetailActivity extends AppCompatActivity
         mPagerAdapter.notifyDataSetChanged();
     }
 
+    public void onUpButtonFloorChanged(long itemId, ArticleDetailFragment fragment) {
+        if (itemId == mSelectedItemId) {
+            mSelectedItemUpButtonFloor = fragment.getUpButtonFloor();
+            updateUpButtonPosition();
+        }
+    }
+
+    private void updateUpButtonPosition() {
+        int upButtonNormalBottom = mTopInset + mUpButton.getHeight();
+        mUpButton.setTranslationY(Math.min(mSelectedItemUpButtonFloor - upButtonNormalBottom, 0));
+    }
 
     private class MyPagerAdapter extends FragmentStatePagerAdapter {
         public MyPagerAdapter(FragmentManager fm) {
@@ -148,7 +173,10 @@ public class ArticleDetailActivity extends AppCompatActivity
         public void setPrimaryItem(ViewGroup container, int position, Object object) {
             super.setPrimaryItem(container, position, object);
             ArticleDetailFragment fragment = (ArticleDetailFragment) object;
-
+            if (fragment != null) {
+                mSelectedItemUpButtonFloor = fragment.getUpButtonFloor();
+                updateUpButtonPosition();
+            }
         }
 
         @Override

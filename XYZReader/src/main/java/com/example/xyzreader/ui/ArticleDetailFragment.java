@@ -71,8 +71,13 @@ public class ArticleDetailFragment extends Fragment implements
     TextView bylineView;
     @BindView(R.id.article_body)
     TextView bodyView;
+    @BindView(R.id.scrollview)
+    ObservableScrollView mScrollView;
     private DrawInsetsFrameLayout mDrawInsetsFrameLayout;
     private int mTopInset;
+    private int mScrollY;
+    @BindView(R.id.photo_container)
+    View mPhotoContainerView;
 
     private boolean mIsCard = false;
 
@@ -120,11 +125,14 @@ public class ArticleDetailFragment extends Fragment implements
         getLoaderManager().initLoader(0, null, this);
     }
 
+    public ArticleDetailActivity getActivityCast() {
+        return (ArticleDetailActivity) getActivity();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
-        setupToolbar(mRootView);
         mDrawInsetsFrameLayout =
                 mRootView.findViewById(R.id.draw_insets_frame_layout);
         mDrawInsetsFrameLayout.setOnInsetsCallback(new DrawInsetsFrameLayout.OnInsetsCallback() {
@@ -133,8 +141,16 @@ public class ArticleDetailFragment extends Fragment implements
                 mTopInset = insets.top;
             }
         });
-        ButterKnife.bind(this, mRootView);
 
+        ButterKnife.bind(this, mRootView);
+        mScrollView.setCallbacks(new ObservableScrollView.Callbacks() {
+            @Override
+            public void onScrollChanged() {
+                mScrollY = mScrollView.getScrollY();
+                getActivityCast().onUpButtonFloorChanged(mItemId, ArticleDetailFragment.this);
+                mPhotoContainerView.setTranslationY((int) (mScrollY - mScrollY / PARALLAX_FACTOR));
+            }
+        });
 
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -224,22 +240,6 @@ public class ArticleDetailFragment extends Fragment implements
         }
     }
 
-    private void setupToolbar(View view) {
-//        Toolbar toolbar = view.findViewById(R.id.toolbar);
-//        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-//        ActionBar a = ((AppCompatActivity) getActivity()).getSupportActionBar();
-//        if (a != null) {
-//            a.setDisplayShowTitleEnabled(false);
-//        }
-//        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                getActivity().onBackPressed();
-//                ((AppCompatActivity) getActivity()).supportFinishAfterTransition();
-//            }
-//        });
-    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
@@ -271,5 +271,15 @@ public class ArticleDetailFragment extends Fragment implements
         bindViews();
     }
 
+    public int getUpButtonFloor() {
+        if (mPhotoContainerView == null || mPhotoView.getHeight() == 0) {
+            return Integer.MAX_VALUE;
+        }
+
+        // account for parallax
+        return mIsCard
+                ? (int) mPhotoContainerView.getTranslationY() + mPhotoView.getHeight() - mScrollY
+                : mPhotoView.getHeight() - mScrollY;
+    }
 
 }
