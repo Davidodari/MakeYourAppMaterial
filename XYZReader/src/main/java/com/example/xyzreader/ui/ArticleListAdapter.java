@@ -122,12 +122,12 @@ class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.ViewHol
         @Override
         public void onClick(View v) {
             Log.d(getClass().getSimpleName(), "click");
-            iitemClickInterface.itemClickedPosition(ArticleListAdapter.this.getItemId(getAdapterPosition()));
+            iitemClickInterface.itemClickedPosition(ArticleListAdapter.this.getItemId(getAdapterPosition()), thumbnailView);
         }
 
     }
 
     interface IitemClick {
-        void itemClickedPosition(long itemPosition);
+        void itemClickedPosition(long itemPosition, View v);
     }
 }
