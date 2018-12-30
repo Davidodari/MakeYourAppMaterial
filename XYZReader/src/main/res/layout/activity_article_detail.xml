@@ -11,17 +11,18 @@
     <FrameLayout
         android:id="@+id/up_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="?actionBarSize"
+        android:background="@android:color/transparent">
 
-        <android.support.v7.widget.Toolbar
+        <ImageButton
             android:id="@+id/action_up"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="?actionBarSize"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:contentInsetStart="72dp"
-            app:layout_collapseMode="parallax"
-            app:navigationIcon="@drawable/ic_arrow_back" />
+            android:background="?selectableItemBackgroundBorderless"
+            android:contentDescription="@string/up"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_arrow_back"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
     </FrameLayout>
-
 
 </FrameLayout>
