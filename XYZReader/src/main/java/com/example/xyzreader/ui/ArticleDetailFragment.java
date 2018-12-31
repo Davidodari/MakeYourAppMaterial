@@ -1,5 +1,6 @@
 package com.example.xyzreader.ui;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.Intent;
@@ -15,9 +16,11 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -234,6 +237,9 @@ public class ArticleDetailFragment extends Fragment implements
                         }
                     })
                     .into(mPhotoView);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ActivityCompat.startPostponedEnterTransition(getActivity());
+            }
         } else {
             mRootView.setVisibility(View.GONE);
             titleView.setText("N/A");
