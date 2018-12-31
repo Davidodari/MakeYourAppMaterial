@@ -22,6 +22,8 @@ import android.support.v4.app.ShareCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
@@ -69,8 +71,8 @@ public class ArticleDetailFragment extends Fragment implements
     TextView titleView;
     @BindView(R.id.article_byline)
     TextView bylineView;
-    @BindView(R.id.article_body)
-    TextView bodyView;
+    @BindView(R.id.recycler_view_text)
+    RecyclerView mRecyclerView;
     @BindView(R.id.scrollview)
     ObservableScrollView mScrollView;
     private DrawInsetsFrameLayout mDrawInsetsFrameLayout;
@@ -208,7 +210,7 @@ public class ArticleDetailFragment extends Fragment implements
                                 + "</font>"));
 
             }
-            bodyView.setText(Html.fromHtml(mCursor.getString(ArticleLoader.Query.BODY).replaceAll("(\r\n|\n)", "<br />")));
+            initRecyclerView();
 
             Glide.with(getActivity())
                     .asBitmap()
@@ -236,10 +238,21 @@ public class ArticleDetailFragment extends Fragment implements
             mRootView.setVisibility(View.GONE);
             titleView.setText("N/A");
             bylineView.setText("N/A");
-            bodyView.setText("N/A");
+            mRecyclerView.setAdapter(null);
         }
     }
 
+    public void initRecyclerView() {
+        mRecyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // specify an adapter (see also next example)
+        LongTextAdapter mAdapter = new LongTextAdapter(mCursor);
+        mRecyclerView.setAdapter(mAdapter);
+    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
